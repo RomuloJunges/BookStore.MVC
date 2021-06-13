@@ -15,7 +15,7 @@ namespace BookStore.Data.Repository
 
         }
 
-        public async Task<Provider> GetProviderByAddress(Guid id)
+        public async Task<Provider> GetProviderAddress(Guid id)
         {
             return await _context.Providers.AsNoTracking()
             .Include(p => p.Address)

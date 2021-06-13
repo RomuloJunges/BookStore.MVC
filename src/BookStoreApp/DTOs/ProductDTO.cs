@@ -34,6 +34,12 @@ namespace BookStore.App.DTOs
         [DisplayName("Ativo?")]
         public bool Active { get; set; }
 
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [DisplayName("Provider")]
+        public Guid ProviderId { get; set; }
+
         public ProviderDTO Provider { get; set; }
+
+        public IEnumerable<ProviderDTO> Providers { get; set; }
     }
 }

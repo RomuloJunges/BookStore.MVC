@@ -6,7 +6,7 @@ namespace BookStore.Business.Interfaces
 {
     public interface IProviderRepository : IRepository<Provider>
     {
-        Task<Provider> GetProviderByAddress(Guid id);
+        Task<Provider> GetProviderAddress(Guid id);
         Task<Provider> GetProviderProductcAddress(Guid id);
     }
 }
