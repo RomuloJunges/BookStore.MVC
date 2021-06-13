@@ -1,4 +1,6 @@
+using BookStore.Business.Interfaces;
 using BookStore.Data.Context;
+using BookStore.Data.Repository;
 using BookStoreApp.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -37,6 +39,13 @@ namespace BookStoreApp
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddScoped<BookStoreDbContext>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProviderRepository, ProviderRepository>();
+            services.AddScoped<IAddressRepository, AddressRepository>();
+
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
