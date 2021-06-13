@@ -1,8 +1,8 @@
 using System;
 
-namespace BookStoreApp.Models
+namespace BookStoreApp.DTOs
 {
-    public class ErrorViewModel
+    public class ErrorDTO
     {
         public string RequestId { get; set; }
 
