@@ -23,6 +23,7 @@ namespace BookStore.App.DTOs
 
         public string Image { get; set; }
 
+        [DisplayName("Image Upload")]
         public IFormFile ImageUpload { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]

@@ -1,17 +1,18 @@
 ﻿@model BookStore.App.DTOs.ProviderDTO
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "New Provider";
 }
 
-<h1>Create</h1>
+<h3 style="padding-top: 50px;">@ViewData["Title"]</h3>
 
-<h4>ProviderDTO</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -23,24 +24,35 @@
                 <span asp-validation-for="Document" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProviderType" class="control-label"></label>
-                <input asp-for="ProviderType" class="form-control" />
-                <span asp-validation-for="ProviderType" class="text-danger"></span>
+                <label for="radioGroup" class="control-label">Provider Type</label>
+                <div id="radioGroup">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="pessoaFisicaLabel" value="1" asp-for="ProviderType" checked>
+                        <label class="form-check-label" for="pessoaFisicaLabel">Pessoa Física</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="pessoaJuridicaLabel" value="2" asp-for="ProviderType">
+                        <label class="form-check-label" for="pessoaJuridicaLabel">Pessoa Jurídica</label>
+                    </div>
+                </div>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Active" /> @Html.DisplayNameFor(model => model.Active)
                 </label>
             </div>
+
+            <h4>Address</h4>
+            <hr />
+
+            <partial name="_Address"/>
+
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Register" class="btn btn-primary" />
+                <a class="btn btn-info" asp-action="Index">Back</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
