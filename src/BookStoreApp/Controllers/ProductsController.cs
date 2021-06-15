@@ -6,6 +6,8 @@ using BookStore.App.DTOs;
 using BookStore.Business.Interfaces;
 using AutoMapper;
 using BookStore.MVC.Models;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace BookStore.App.Controllers
 {
@@ -55,11 +57,21 @@ namespace BookStore.App.Controllers
 
             if (!ModelState.IsValid) return View(productDTO);
 
+            var imgPrefix = Guid.NewGuid() + "_";
+
+            if(! await UploadImage(productDTO.ImageUpload, imgPrefix))
+            {
+                return View(productDTO);
+            }
+
+            productDTO.Image = imgPrefix + productDTO.ImageUpload.FileName;
+
             await _productRepository.Add(_mapper.Map<Product>(productDTO));
 
-            return View(productDTO);
+            return RedirectToAction("Index");
         }
 
+        
 
         public async Task<IActionResult> Edit(Guid id)
         {
@@ -80,9 +92,31 @@ namespace BookStore.App.Controllers
         {
             if (id != productDTO.Id) return NotFound();
 
+            var productUpdated = await GetProductById(id);
+            productDTO.Provider = productUpdated.Provider;
+            productDTO.Image = productUpdated.Image;
+
             if (!ModelState.IsValid) return View(productDTO);
 
-            await _productRepository.Update(_mapper.Map<Product>(productDTO));
+            if (productDTO.ImageUpload != null)
+            {
+                var imgPrefix = Guid.NewGuid() + "_";
+
+                if (!await UploadImage(productDTO.ImageUpload, imgPrefix))
+                {
+                    return View(productDTO);
+                }
+
+                productUpdated.Image = imgPrefix + productDTO.ImageUpload.FileName;
+            }
+
+            productUpdated.Name = productDTO.Name;
+            productUpdated.Description = productDTO.Description;
+            productUpdated.Price = productDTO.Price;
+            productUpdated.Active = productDTO.Active;
+
+            await _productRepository.Update(_mapper.Map<Product>(productUpdated));
+
             return RedirectToAction("Index");
         }
 
@@ -123,6 +157,26 @@ namespace BookStore.App.Controllers
             product.Providers = _mapper.Map<IEnumerable<ProviderDTO>>(await _providerRepository.GetAll());
 
             return product;
+        }
+
+        private async Task<bool> UploadImage(IFormFile imageUpload, string imgPrefix)
+        {
+            if (imageUpload.Length <= 0) return false;
+
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", imgPrefix + imageUpload.FileName);
+
+            if (System.IO.File.Exists(path))
+            {
+                ModelState.AddModelError(string.Empty, "Já existe um arquivo com este nome");
+                return false;
+            }
+
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await imageUpload.CopyToAsync(stream);
+            }
+
+            return true;
         }
     }
 }
