@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BookStore.App.Extensions;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,6 +28,7 @@ namespace BookStore.App.DTOs
         public IFormFile ImageUpload { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [Moeda]
         public decimal Price { get; set; }
 
         [ScaffoldColumn(false)]
